@@ -3,7 +3,7 @@ module.exports = (io, socket) => {
   console.log("a user connected");
 
   // ==============================================================================================
-  //  recinv and send data here
+  //  receive and send data here
   // custiom event: socket.on with reciving data
   socket.on("chat message", (msg) => {
     // custiom event: io.emit with sending data , sob doroner data patano jabe ey emit er maddome
@@ -21,9 +21,9 @@ module.exports = (io, socket) => {
   // Socket rooming: one by one data communication , join room by id
   socket.on("send-message", (message, room) => {
     if (room === "") {
-      socket.broadcast.emit("recive-message", message);
+      // socket.broadcast.emit("recive-message", message);
     } else {
-      socket.to(room).emit("recive-message", message);
+      // socket.to(room).emit("recive-message", message);
     }
   });
 
@@ -35,20 +35,21 @@ module.exports = (io, socket) => {
 
   // ==============================================================================================
   // socket name spass
-  const userIO = io.of("/user");
-  userIO.on("connection", (socket) => {
-    console.log("connected user with namespass", socket.username);
-  });
+  // const userIO = io.of("/user");
+  // userIO.on("connection", (socket) => {
+  //   console.log("connected user with namespass user");
+  // });
+
   // using middelware
-  userIO.use((socket, next) => {
-    console.log(socket.handshake.auth.token);
-    if (socket.handshake.auth.token) {
-      socket.username = getUsernameFromToken(socket.handshake.auth.token);
-      next();
-    } else {
-      next(new Error("Please send token"));
-    }
-  });
+  // userIO.use((socket, next) => {
+  //   console.log(socket.handshake.auth.token);
+  //   if (socket.handshake.auth.token) {
+  //     socket.username = getUsernameFromToken(socket.handshake.auth.token);
+  //     next();
+  //   } else {
+  //     next(new Error("Please send token"));
+  //   }
+  // });
 
   function getUsernameFromToken(token) {
     return token;
@@ -57,10 +58,10 @@ module.exports = (io, socket) => {
   // ==============================================================================================
   // socket connection and disconnection with prass key
 
-  socket.on("ping", (num) => {
-    console.log(num);
-    io.emit("interval-data", num);
-  });
+  // socket.on("ping", (num) => {
+  //   console.log(num);
+  //   io.emit("interval-data", num);
+  // });
 
   // ==============================================================================================
   socket.on("disconnect", () => {
