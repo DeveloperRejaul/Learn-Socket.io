@@ -18,8 +18,27 @@
       });
       //  receiving custom event data
       socket.on("customEvent", (message) => console.log(message));
-
       socket.emit("clintEvent", "Hello Server, I am Clint ");
+
+      /**=========================================================================================
+       *                                    Emitting events
+       *===========================================================================================*/
+      // Basic Event
+      socket.on("hello", (arg) => {
+        console.log(arg); // word // also we can emit in hare
+      });
+
+      // Acknowledgements
+      // ay system e call back er maddome server side take response ta ase
+      socket.emit("Acknowledgements", "1", (response) => {
+        console.log(response.status); // ok
+      });
+
+      // Volatile events
+      // let count = 0;
+      // setInterval(() => {
+      //   socket.volatile.emit("ping", ++count);
+      // }, 1000);
     </script>
   </body>
 </html>

@@ -27,6 +27,6 @@ module.exports = (io, socket) => {
   socket.on("messageSend", (roomName, message) => {
     // send message in spastic room
     socket.to(roomName).emit("messageResive", message);
-    // socket.broadcast.emit("messageResive", message);
+    // socket.broadcast.emit("messageResive", message); // broadcast send data to all user in namespace
   });
 };
