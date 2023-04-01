@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Socket.IO chat</title>
+    <style>
+      body {
+        margin: 0;
+        padding-bottom: 3rem;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Helvetica, Arial, sans-serif;
+      }
+      #form {
+        background: rgba(0, 0, 0, 0.15);
+        padding: 0.25rem;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        display: flex;
+        height: 3rem;
+        box-sizing: border-box;
+        backdrop-filter: blur(10px);
+      }
+      #input {
+        border: none;
+        padding: 0 1rem;
+        flex-grow: 1;
+        border-radius: 2rem;
+        margin: 0.25rem;
+      }
+      #input:focus {
+        outline: none;
+      }
+      #form > button {
+        background: #333;
+        border: none;
+        padding: 0 1rem;
+        margin: 0.25rem;
+        border-radius: 3px;
+        outline: none;
+        color: #fff;
+      }
+
+      #messages {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+      }
+      #messages > li {
+        padding: 0.5rem 1rem;
+      }
+      #messages > li:nth-child(odd) {
+        background: #efefef;
+      }
+    </style>
+  </head>
+  <body>
+    <h4 id="title"></h4>
+    <h5 id="h5"></h5>
+
+    <ul id="messages"></ul>
+    <form id="form" action="">
+      <input id="input" autocomplete="off" /><button>Send</button>
+      <input id="room" autocomplete="off" /><button id="join">Join</button>
+    </form>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      var socket = io();
+
+      // connect with name spass
+      // var userSocket = io("/user", {
+      //   auth: { token: "Test" },
+      // });
+
+      var messages = document.getElementById("messages");
+      var form = document.getElementById("form");
+      var input = document.getElementById("input");
+      var room = document.getElementById("room");
+      var joinBTN = document.getElementById("join");
+      var h5 = document.getElementById("h5");
+
+      const showMessage = (msg) => {
+        var item = document.createElement("li");
+        item.textContent = msg;
+        messages.appendChild(item);
+        window.scrollTo(0, document.body.scrollHeight);
+      };
+      const setSmg = (smg) => {
+        h5.textContent = smg;
+      };
+
+      // ====================================================================================
+      // sowing connect by id
+      socket.on("connect", () => {
+        const h4 = document.getElementById("title");
+        h4.textContent = `You connect by ${socket.id} id `;
+      });
+
+      // ====================================================================================
+      // sending data with emit mathod , handle all of functionality
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        const messageValue = input.value;
+        const roomValue = room.value;
+
+        if (messageValue === "") return;
+        showMessage(messageValue);
+        socket.emit("send-message", messageValue, roomValue);
+
+        input.value = "";
+      });
+
+      // ====================================================================================
+      // reciving data with "on" mathod
+      // socket.on("recive_message", (msg) => showMessage(msg));
+
+      // ====================================================================================
+      // reciving broadcast data
+      // socket.on("broadcasta_message", (message) => {
+      //   console.log(message);
+      // });
+
+      // ====================================================================================
+      // rooming in socket
+      joinBTN.addEventListener("click", () => {
+        const roomValue = room.value;
+        socket.emit("join-room", roomValue, (messages) => {
+          showMessage(messages);
+        });
+      });
+
+      socket.on("recive-message", (smg) => {
+        showMessage(smg);
+      });
+
+      // =======================================================================================
+      // difult Error event
+      // userSocket.on("connect_error", (error) => {
+      //   showMessage(error);
+      // });
+
+      // =======================================================================================
+      // disconnect and connect with key lisenting
+
+      let count = 0;
+      setInterval(() => {
+        // volatile dile loop ta disconnect kurle off take
+        socket.volatile.emit("ping", ++count);
+        // volatile na dile loop ta disconnect kurleo salo take take
+        // socket.emit("ping", ++count);
+      }, 1000);
+
+      // recive interval data
+      socket.on(
+        "interval-data",
+        async (data) => await setSmg(`number: ${data}`)
+      );
+
+      document.addEventListener("keydown", (e) => {
+        if (e.target.matches("input")) return;
+        if (e.key === "c") socket.connect();
+        if (e.key === "d") socket.disconnect();
+      });
+    </script>
+  </body>
+</html>
