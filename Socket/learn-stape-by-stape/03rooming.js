@@ -12,8 +12,8 @@ module.exports = (io, socket) => {
   // var count = 1;
   // setInterval(() => {
   //   count++;
-  //   // socket.to("room1").emit("receiveMessage", `hello people${count}`);
-  //   // socket.broadcast.emit("receiveMessage", "msg");
+  // socket.to("room1").emit("receiveMessage", `hello people${count}`);
+  // socket.broadcast.emit("receiveMessage", "msg");
   // }, 2000);
 
   // =========================================================================

@@ -31,6 +31,15 @@ module.exports = (io, socket) => {
   socket.on("join-room", (room, cb) => {
     socket.join(room);
     cb(`Join ${room}`);
+
+    // get all of user list in room
+    // io.sockets.adapter.get("room-name")
+
+    // get room size
+    // io.sockets.adapter.get("room-name").size
+
+    // sent data in room
+    // io.sockets.in("room-name").emit("event-name", "data");
   });
 
   // ==============================================================================================

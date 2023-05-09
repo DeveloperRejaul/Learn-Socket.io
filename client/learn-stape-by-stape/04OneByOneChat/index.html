@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="/socket.io/socket.io.js"></script>
+  </head>
+  <body>
+    <h1 id="user1" class="user">User One</h1>
+    <h1 id="user2" class="user">User two</h1>
+    <h1 id="user3" class="user">User three</h1>
+
+    <script>
+      var socket = io("/onebyonechat");
+      user1.addEventListener("click", (e) => alert("Hello"));
+    </script>
+  </body>
+</html>

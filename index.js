@@ -7,6 +7,7 @@ const onConnectionAllInOne = require("./Socket/onConnectionAllInOne.js");
 const handleEvent = require("./Socket/learn-stape-by-stape/02HandleEvent.js");
 const createNameSpaces = require("./Socket/learn-stape-by-stape/01CreatingNameSpasse.js");
 const rooming = require("./Socket/learn-stape-by-stape/03rooming.js");
+const oneByOneChat = require("./Socket/learn-stape-by-stape/oneByOneChat.js");
 
 const io = new Server(server);
 
@@ -36,6 +37,14 @@ app.get("/room", (req, res) =>
 );
 
 // =============================================================================================
+// 03 for one by one chat
+app.get("/onebyonechat", (req, res) =>
+  res.sendFile(
+    __dirname + "/client/learn-stape-by-stape/04OneByOneChat/index.html"
+  )
+);
+
+// =============================================================================================
 // default route  and all in one roue
 // app.get("/user", (req, res) => res.sendFile(__dirname + "/index.html"));
 app.get("/", (req, res) => res.sendFile(__dirname + "/index.html"));
@@ -55,7 +64,11 @@ eventIO.on("connection", (socket) => handleEvent(eventIO, socket));
 
 // 03 rooming functionality
 const roomIO = io.of("/room");
-roomIO.on("connection", (socket) => rooming(eventIO, socket.b));
+roomIO.on("connection", (socket) => rooming(eventIO, socket));
+
+// 03 rooming functionality
+const oneByOneIO = io.of("/onebyonechat");
+roomIO.on("connection", (socket) => oneByOneChat(oneByOneIO, socket));
 
 server.listen(3000, () => {
   console.log("listening on *:3000");
